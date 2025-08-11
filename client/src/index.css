@@ -1,0 +1,15 @@
+/* Import Tailwind CSS framework */
+@import "tailwindcss";
+
+/* Import Outfit font from Google Fonts - weights from 100 to 900 */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+
+/* Apply Outfit font to all elements */
+*{
+  font-family: "Outfit", sans-serif;
+}
+
+/* Hide scrollbar for webkit browsers (Chrome, Safari, newer Edge) */
+::-webkit-scrollbar {
+  display: none;
+}
