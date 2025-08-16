@@ -66,27 +66,7 @@ app.use(express.json({
     limit: "4mb"  // Allow larger payloads for image uploads
 }));
 
-// <-- 2. ADD THE CORS CONFIGURATION HERE -->
-const allowedOrigins = [
-    'https://real-time-chat-application-two-rho.vercel.app', // Your frontend Vercel URL
-    'http://localhost:5173' // Your local development URL
-];
-
-
-const corsOptions = {
-    origin: (origin, callback) => {
-        // Allow requests with no origin (like Postman or mobile apps)
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
-    credentials: true // This is important for cookies, authorization headers, etc.
-};
-
-app.use(cors(corsOptions));
-// <-- END OF CORS CONFIGURATION -->
+app.use(cors());  // Enable CORS for all routes
 
 /**
  * API Routes Configuration
