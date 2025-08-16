@@ -38,7 +38,7 @@ const App = () => {
 
   return (
     // Container div with background image using Tailwind CSS
-    <div className="bg-[url('./src/assets/bgImage.svg')] bg-contain">
+    <div className="bg-[url('/bgImage.svg')] bg-contain">
       <Toaster/>
       {/* Router configuration for the application */}
       <Routes>

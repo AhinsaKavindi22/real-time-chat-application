@@ -43,7 +43,7 @@ io.on("connection", (socket) => {
     console.log("User Connected", userId);
 
     // Register user's socket connection
-    if(userId) {
+    if (userId) {
         userSocketMap[userId] = socket.id;
     }
 
@@ -92,5 +92,11 @@ await connectDB();
  * Initialize the server on the specified port
  * Uses PORT from environment variables or defaults to 5000
  */
-const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => console.log("Server is running on PORT: " + PORT));
+if (process.env.NODE_ENV !== "production") {
+    const PORT = process.env.PORT || 5000;
+    server.listen(PORT, () => console.log("Server is running on PORT: " + PORT));
+}
+
+
+// export server for vercel
+export default server;
