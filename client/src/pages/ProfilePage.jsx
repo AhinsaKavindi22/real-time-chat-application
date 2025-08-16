@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import assets from '../assets/assets';
+import { AuthContext } from '../../context/AuthContext';
+import { useContext } from 'react'
+
 
 /**
  * ProfilePage Component
@@ -14,15 +17,19 @@ import assets from '../assets/assets';
  * and handles image preview functionality for profile picture updates.
  */
 const ProfilePage = () => {
+
+  const { value } = useContext(AuthContext);
+  const { authUser, updateProfile } = value;
+
   // State for managing the selected profile image file
   const [seletedImg, setSelectedImg] = useState(null);
-  
+
   // Hook for programmatic navigation
   const navigate = useNavigate();
-  
+
   // User profile information states with default values
-  const [name, setName] = useState("Martin Johnson")
-  const [bio, setBio] = useState("Hi Everyone, I am Using QuickChat")
+  const [name, setName] = useState(authUser.fullName)
+  const [bio, setBio] = useState(authUser.bio)
 
   /**
    * Handles form submission for profile updates
@@ -31,7 +38,20 @@ const ProfilePage = () => {
    */
   const handleSubmit = async (e) => {
     e.preventDefault();
-    navigate('/')  // Redirect to home page after save
+    if (!seletedImg) {
+      await updateProfile({ fullName: name, bio })
+      navigate('/');  // Redirect to home page after save
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.readAsDataURL(seletedImg);
+    reader.onload = async () => {
+      const base64Image = reader.result;
+      await updateProfile({ profilePic: base64Image, fullName: name, bio })
+      navigate('/');
+    }
+
   }
 
   return (
@@ -41,48 +61,48 @@ const ProfilePage = () => {
         {/* Profile update form */}
         <form onSubmit={handleSubmit} className='flex flex-col gap-5 p-10 flex-1'>
           <h3 className='text-lg'>Profile Details</h3>
-          
+
           {/* Profile image upload section */}
           <label htmlFor="avatar" className='flex items-center gap-3 cursor-pointer'>
-            <input 
-              onChange={(e) => setSelectedImg(e.target.files[0])} 
-              type="file" 
-              id='avatar' 
-              accept='.png, .jpg, .jpeg' 
-              hidden 
+            <input
+              onChange={(e) => setSelectedImg(e.target.files[0])}
+              type="file"
+              id='avatar'
+              accept='.png, .jpg, .jpeg'
+              hidden
             />
             {/* Image preview - shows selected image or default avatar */}
-            <img 
-              src={seletedImg ? URL.createObjectURL(seletedImg) : assets.avatar_icon} 
-              alt="Profile avatar" 
-              className={`w-12 h-12 ${seletedImg && 'rounded-full'}`} 
+            <img
+              src={seletedImg ? URL.createObjectURL(seletedImg) : assets.avatar_icon}
+              alt="Profile avatar"
+              className={`w-12 h-12 ${seletedImg && 'rounded-full'}`}
             />
             Upload Profile Image
           </label>
 
           {/* Display name input field */}
-          <input 
-            onChange={(e) => setName(e.target.value)} 
+          <input
+            onChange={(e) => setName(e.target.value)}
             value={name}
-            type="text" 
-            required 
+            type="text"
+            required
             placeholder='Your Name'
-            className='p-2 border border-gray-500 rounded-md focus:outline-none focus:ring-2 fcus:ring-violet-500' 
+            className='p-2 border border-gray-500 rounded-md focus:outline-none focus:ring-2 fcus:ring-violet-500'
           />
 
           {/* Bio/status message input field */}
-          <textarea 
-            onChange={(e) => setBio(e.target.value)} 
+          <textarea
+            onChange={(e) => setBio(e.target.value)}
             value={bio}
-            placeholder='Write profile bio' 
-            required 
+            placeholder='Write profile bio'
+            required
             rows={4}
             className='p-2 border border-gray-500 rounded-md focus:outline-none focus:ring-2 fcus:ring-violet-500'
           ></textarea>
 
           {/* Submit button with gradient background */}
-          <button 
-            type='submit' 
+          <button
+            type='submit'
             className='bg-gradient-to-r from-purple-400 to-violet-600 text-white p-2 rounded-full text-lg cursor-pointer'
           >
             Save
@@ -90,10 +110,10 @@ const ProfilePage = () => {
         </form>
 
         {/* App logo display - repositions to top on mobile */}
-        <img 
-          src={assets.logo_icon} 
-          alt="App logo" 
-          className='max-w-44 aspect-square rounded-full mx-10 max-sm:mt-10' 
+        <img
+          src={authUser?.profilePic || assets.logo_icon}
+          alt="App logo"
+          className={`max-w-44 aspect-square rounded-full mx-10 max-sm:mt-10 ${seletedImg && 'rounded-full'}`}
         />
       </div>
     </div>

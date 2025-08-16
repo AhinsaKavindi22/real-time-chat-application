@@ -1,7 +1,9 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import Sidebar from '../components/Sidebar'
 import ChatContainer from '../components/ChatContainer'
 import RightSidebar from '../components/RightSidebar'
+import { ChatContext } from '../../context/ChatContext';
+
 
 /**
  * HomePage Component
@@ -18,8 +20,8 @@ import RightSidebar from '../components/RightSidebar'
  * - Tablet/Desktop (with selection): Three column layout with adjusted proportions
  */
 const HomePage = () => {
-  // State to track the currently selected user for chat
-  const [selectedUser, setSelectedUser] = useState('');
+  const { value1 } = useContext(ChatContext);
+  const { selectedUser } = value1;
 
   return (
     // Main container with responsive padding
@@ -28,16 +30,16 @@ const HomePage = () => {
       <div className={`backdrop-blur-xl border-2 border-gray-600 rounded-2xl overflow-hidden
       h-[100%] grid grid-cols-1 relative ${
         // Dynamic grid layout based on selection state and screen size
-        selectedUser 
+        selectedUser
           ? 'md:grid-cols-[1fr_1.5fr_1fr] xl:grid-cols-[1fr_2fr_1fr]' // Three column layout when user selected
           : 'md:grid-cols-2' // Two column layout when no user selected
-      }`}>
+        }`}>
         {/* Left sidebar with user list */}
-        <Sidebar selectedUser={selectedUser} setSelectedUser={setSelectedUser}/>
+        <Sidebar />
         {/* Main chat container */}
-        <ChatContainer selectedUser={selectedUser} setSelectedUser={setSelectedUser}/>
+        <ChatContainer />
         {/* Right sidebar with user details */}
-        <RightSidebar selectedUser={selectedUser} setSelectedUser={setSelectedUser}/>
+        <RightSidebar />
       </div>
     </div>
   )

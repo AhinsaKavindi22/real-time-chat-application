@@ -36,6 +36,6 @@ userRouter.put("/update-profile", protectRoute, updateProfile);
 
 // Verify if user's token is valid (requires authentication)
 // Headers: { token }
-userRouter.get("/check-auth", protectRoute, checkAuth);
+userRouter.get("/check", protectRoute, checkAuth);
 
 export default userRouter;

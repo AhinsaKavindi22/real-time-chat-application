@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import assets from '../assets/assets'
+import { useContext } from 'react'
+import { AuthContext } from '../../context/AuthContext'
 
 /**
  * LoginPage Component
@@ -25,6 +27,10 @@ const LoginPage = () => {
   // Tracks progress in the signup flow (false: basic info, true: additional info)
   const [isDataSubmitted, setIsDataSubmitted] = useState(false);
 
+  const { value } = useContext(AuthContext); 
+  const { login } = value; 
+
+
   /**
    * Handles form submission for both login and signup flows
    * For signup: Implements a two-step process
@@ -39,6 +45,8 @@ const LoginPage = () => {
       setIsDataSubmitted(true)  // Move to second step of signup
       return;
     }
+
+    login(currState === 'Sign up' ? 'signup' : 'login', {fullName, email, password, bio})
   }
 
   return (
