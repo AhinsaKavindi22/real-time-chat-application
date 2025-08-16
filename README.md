@@ -110,4 +110,3 @@ Follow these instructions to get a copy of the project up and running on your lo
 
 ---
 
-Feel free to contribute to this project. If you find any issues or have suggestions for improvements, please open an issue or submit a pull request.
